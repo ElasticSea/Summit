@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Vexe.Runtime.Extensions;
 using Vexe.Runtime.Types;
 
 namespace Assets.Base.Scripts.Grid
@@ -33,7 +34,16 @@ namespace Assets.Base.Scripts.Grid
         public GameObject this[int x, int y]
         {
             get { return _grid[x][y]; }
-            set { _grid[x][y] = value; }
+            set
+            {
+                _grid[x][y] = value;
+                if (value != null)
+                {
+                    var cell = value.transform.GetOrAddComponent<GridCell>();
+                    cell.X = x;
+                    cell.Y = y;
+                }
+            }
         }
 
         public void init(GameObject[,] gameObjects)
