@@ -20,9 +20,9 @@ namespace Assets.Base.Scripts
                 {
                     var instance = Instantiate(Prefab);
                     instance.transform.SetParent(transform);
+                    instance.name += " " + x + ":" + y;
                     var xpos = (x - (Width - 1) / 2f) * size;
                     var ypos = (y - (Height - 1) / 2f) * size;
-                    instance.name += " " + xpos + ":" + ypos;
                     instance.transform.position = new Vector2(xpos, ypos).ToXZ();
                 }
             }
