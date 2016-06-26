@@ -1,0 +1,3 @@
+[submodule "Assets/Base/VFW"]
+	path = Assets/Base/VFW
+	url = https://github.com/vexe/VFW.git
