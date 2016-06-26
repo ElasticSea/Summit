@@ -144,10 +144,13 @@ namespace UnityEngine.UI
             dontCallEvent = false;
         }
 
+
+        #if UNITY_EDITOR
         protected override void OnValidate()
         {
             UpdateJoystickGraphic();
         }
+        #endif
 
         public void SetAxis(Vector2 axis)
         {
