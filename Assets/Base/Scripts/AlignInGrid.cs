@@ -5,12 +5,10 @@ namespace Assets.Base.Scripts
 {
     public class AlignInGrid : MonoBehaviour
     {
+        public GameObject Prefab;
+        public int Width;
         public int Height;
         public float ItemOffset;
-
-        public GameObject Prefab;
-
-        public int Width;
 
         public void Align()
         {
