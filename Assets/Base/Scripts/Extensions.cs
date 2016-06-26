@@ -302,6 +302,14 @@ namespace Assets.Shared.Scripts
 #endif
         }
 
+        public static IEnumerable<Transform> Children(this Transform transform)
+        {
+            for (var i = 0; i < transform.childCount; i++)
+            {
+                yield return transform.GetChild(i);
+            }
+        }
+
         public static void Submit(this GameObject gameObject)
         {
             var pointer = new PointerEventData(EventSystem.current);
