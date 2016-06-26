@@ -1,2 +1,2 @@
-# UnityBaseProject
-Base project for all my games.
+# Lights Out
+User must turn all lights out. Switching light switch on/off affects neightbour lights.
