@@ -7,8 +7,7 @@ namespace Assets.Base.Scripts.Grid
 {
     public class Grid : BaseBehaviour
     {
-        [Hide, SerializeField]
-        private ArrayWithArray[] _grid;
+        [Hide, SerializeField] private ArrayWithArray[] _grid;
 
         [Show]
         public int Width
@@ -16,7 +15,8 @@ namespace Assets.Base.Scripts.Grid
             get
             {
                 if (_grid == null) return 0;
-                return _grid.Length; }
+                return _grid.Length;
+            }
         }
 
         [Show]
@@ -46,6 +46,12 @@ namespace Assets.Base.Scripts.Grid
             }
         }
 
+        public bool InBounds(int x, int y)
+        {
+            return x >= 0 && y >= 0 && x < Width && y < Height;
+        }
+
+
         public void init(GameObject[,] gameObjects)
         {
             _grid = new ArrayWithArray[gameObjects.GetLength(0)];
@@ -67,8 +73,7 @@ namespace Assets.Base.Scripts.Grid
     [Serializable]
     public class ArrayWithArray
     {
-        [SerializeField]
-        internal GameObject[] array;
+        [SerializeField] internal GameObject[] array;
 
         public GameObject this[int i]
         {
