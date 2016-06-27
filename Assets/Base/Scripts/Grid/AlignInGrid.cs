@@ -28,7 +28,7 @@ namespace Assets.Base.Scripts.Grid
 
                     var xpos = (x - (Width - 1) / 2f) * size;
                     var ypos = (y - (Height - 1) / 2f) * size;
-                    grid[x, y].transform.position = new Vector2(xpos, ypos).ToXZ();
+                    grid[x, y].transform.localPosition = new Vector2(xpos, ypos).ToXZ();
                 }
             }
         }
