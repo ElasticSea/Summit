@@ -15,7 +15,7 @@ namespace Assets.Scripts
 
         protected override void setLevel(int newLevel)
         {
-            PullablePart.DOMoveY(newLevel, TransitionTime).SetEase(TransitionEase);
+            PullablePart.DOLocalMoveY(newLevel, TransitionTime).SetEase(TransitionEase);
         }
     }
 }
