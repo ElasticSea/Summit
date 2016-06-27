@@ -17,21 +17,24 @@ namespace Assets.Scripts
             var children = transform.Children();
             grid = GetComponent<Grid>();
             children
-                .Select(child => child.GetComponent<LightSwitch>())
-                .ForEach(child => child.OnSwitchClicked += FlipSwitch);
+                .Select(child => child.GetComponent<ClickableSwitch>())
+                .ForEach(child => child.OnSwitchClicked += () =>
+                {
+                    FlipSwitch(child);
+                });
 
         }
 
-        private void FlipSwitch(LightSwitch lightSwitch)
+        private void FlipSwitch(ClickableSwitch clickableSwitch)
         {
-            var cell = lightSwitch.GetComponent<GridCell>();
+            var cell = clickableSwitch.GetComponent<GridCell>();
             for (var x = cell.X - Range; x <= cell.X + Range; x++)
             {
                 for (var y = cell.Y - Range; y <= cell.Y + Range; y++)
                 {
                     if (grid.InBounds(x, y))
                     {
-                        grid[x,y].GetComponent<LightSwitch>().Switch();
+                        grid[x,y].GetComponent<ClickableSwitch>().Switch();
                     }
                 }
             }
