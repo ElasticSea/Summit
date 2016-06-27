@@ -10,25 +10,30 @@ ModelImporter:
     100004: Switch
     100006: Base
     100008: Cube
+    100010: Pedestal
     400000: Border
     400002: //RootNode
     400004: Switch
     400006: Base
     400008: Cube
+    400010: Pedestal
     2300000: Border
     2300002: Switch
     2300004: //RootNode
     2300006: Base
     2300008: Cube
+    2300010: Pedestal
     3300000: Border
     3300002: Switch
     3300004: //RootNode
     3300006: Base
     3300008: Cube
+    3300010: Pedestal
     4300000: Switch
     4300002: Border
     4300004: Cube
     4300006: Base
+    4300008: Pedestal
     7400000: Default Take
     9500000: //RootNode
   materials:
