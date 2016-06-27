@@ -1,4 +1,4 @@
-﻿using Assets.Shared.Scripts;
+﻿using DG.Tweening;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -6,10 +6,10 @@ namespace Assets.Scripts
     [RequireComponent(typeof(Collider))]
     public class LightSwitch : MonoBehaviour
     {
-
         public delegate void OnSwitchClickedHandler(LightSwitch lightSwitch);
         public event OnSwitchClickedHandler OnSwitchClicked;
 
+        public Transform ScalingPart;
         public int Levels = 1;
         private int currentLevel;
 
@@ -21,7 +21,7 @@ namespace Assets.Scripts
         private void setLevel(int newLevel)
         {
             currentLevel = newLevel;
-            transform.SetY(currentLevel * 0.1f);
+            ScalingPart.DOScaleY(currentLevel + 1, 0.33f).SetEase(Ease.OutQuad);
         }
 
         public void OnMouseDown()
