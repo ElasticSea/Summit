@@ -1,39 +1,19 @@
 fileFormatVersion: 2
 guid: 55dac50935fb2ff479ccf48f69286c66
-timeCreated: 1466947526
+timeCreated: 1467152010
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Border
-    100002: //RootNode
-    100004: Switch
-    100006: Base
-    100008: Cube
-    400000: Border
-    400002: //RootNode
-    400004: Switch
-    400006: Base
-    400008: Cube
-    2300000: Border
-    2300002: Switch
-    2300004: //RootNode
-    2300006: Base
-    2300008: Cube
-    3300000: Border
-    3300002: Switch
-    3300004: //RootNode
-    3300006: Base
-    3300008: Cube
-    4300000: Switch
-    4300002: Border
-    4300004: Cube
-    4300006: Base
-    4300008: Ground
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Ground
     7400000: Default Take
     9500000: //RootNode
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:

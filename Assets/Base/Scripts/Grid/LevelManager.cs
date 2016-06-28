@@ -27,7 +27,6 @@ namespace Assets.Base.Scripts.Grid
             lightGrid = GetComponent<LightGrid>();
             lightGrid.OnPuzzleSolved += EndLevel;
             levelIterator = Levels.ToList().GetEnumerator();
-
             InitNextLevel();
         }
 
