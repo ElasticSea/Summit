@@ -24,11 +24,14 @@ namespace Assets.Base.Scripts.Grid
                 for (var y = 0; y < grid.Height; y++)
                 {
                     grid[x, y] = provider.Provide(x, y);
-                    grid[x, y].transform.SetParent(transform);
+                    if (grid[x, y] != null)
+                    {
+                        grid[x, y].transform.SetParent(transform);
 
-                    var xpos = (x - (provider.Width - 1) / 2f) * size;
-                    var ypos = (y - (provider.Height - 1) / 2f) * size;
-                    grid[x, y].transform.localPosition = new Vector2(xpos, ypos).ToXZ();
+                        var xpos = (x - (provider.Width - 1)/2f)*size;
+                        var ypos = (y - (provider.Height - 1)/2f)*size;
+                        grid[x, y].transform.localPosition = new Vector2(xpos, ypos).ToXZ();
+                    }
                 }
             }
         }
