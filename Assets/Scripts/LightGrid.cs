@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Assets.Base.Scripts.Grid;
 using Assets.Shared.Scripts;
 using UnityEngine;
@@ -8,21 +7,27 @@ namespace Assets.Scripts
 {
     public class LightGrid : MonoBehaviour
     {
+        public delegate void OnPuzzleSolvedHandler();
+        public event OnPuzzleSolvedHandler OnPuzzleSolved;
+
         private Grid grid;
 
         public int Range;
 
-        private void Start()
+        public void Init()
         {
-            var children = transform.Children();
             grid = GetComponent<Grid>();
-            children
+            
+            transform.Children()
                 .Select(child => child.GetComponent<ClickableSwitch>())
-                .ForEach(child => child.OnSwitchClicked += () =>
-                {
-                    FlipSwitch(child);
-                });
+                .ForEach(child => child.OnSwitchClicked += FlipSwitch);
+        }
 
+        public void DeInit()
+        {
+            transform.Children()
+                .Select(child => child.GetComponent<ClickableSwitch>())
+                .ForEach(child => child.OnSwitchClicked -= FlipSwitch);
         }
 
         private void FlipSwitch(ClickableSwitch clickableSwitch)
@@ -34,10 +39,19 @@ namespace Assets.Scripts
                 {
                     if (grid.InBounds(x, y))
                     {
-                        grid[x,y].GetComponent<ClickableSwitch>().Switch();
+                        var neighbour = grid[x, y];
+                        if (neighbour != null)
+                            neighbour.GetComponent<ClickableSwitch>().Switch();
                     }
                 }
             }
+
+            if (Solved() && OnPuzzleSolved != null) OnPuzzleSolved();
+        }
+
+        private bool Solved()
+        {
+            return transform.Children().All(child => child.GetComponent<ClickableSwitch>().IsDown());
         }
     }
 }

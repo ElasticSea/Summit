@@ -1,11 +1,12 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public abstract class ClickableSwitch : MonoBehaviour
     {
-        public delegate void OnSwitchClickedHandler();
+        public delegate void OnSwitchClickedHandler(ClickableSwitch clickable);
         public event OnSwitchClickedHandler OnSwitchClicked;
 
         public int Levels = 1;
@@ -18,16 +19,30 @@ namespace Assets.Scripts
 
         public void Click()
         {
-            if (OnSwitchClicked != null) OnSwitchClicked();
+            if (OnSwitchClicked != null) OnSwitchClicked(this);
         }
 
         public void Switch()
         {
-            var newLevel = (currentLevel + 1) % (Levels + 1);
+            SetLeveLInternal((currentLevel + 1) % (Levels + 1));
+        }
+
+        private void SetLeveLInternal(int newLevel)
+        {
             setLevel(newLevel);
             currentLevel = newLevel;
         }
 
+        public void Activate()
+        {
+            SetLeveLInternal(Levels);
+        }
+
         protected abstract void setLevel(int newLevel);
+
+        public bool IsDown()
+        {
+            return currentLevel == 0;
+        }
     }
 }
