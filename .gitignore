@@ -29,3 +29,7 @@ sysinfo.txt
 *.apk
 *.unitypackage
 *.keystore
+
+# Paid Assets
+*/Paid/
+*/Paid.meta
