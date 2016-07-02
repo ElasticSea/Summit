@@ -33,9 +33,9 @@ namespace Assets.Scripts
             currentLevel = newLevel;
         }
 
-        public void Activate()
+        public void Activate(int level)
         {
-            SetLeveLInternal(Levels);
+            SetLeveLInternal(level);
         }
 
         protected abstract void setLevel(int newLevel);

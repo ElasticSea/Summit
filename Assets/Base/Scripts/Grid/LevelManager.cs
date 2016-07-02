@@ -6,27 +6,28 @@ using Assets.Scripts.UI;
 using Assets.Shared.Scripts;
 using Assets.Shared.Scripts.tuple;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
 
 namespace Assets.Base.Scripts.Grid
 {
+    [RequireComponent(typeof(LevelBuilder))]
     public class LevelManager : MonoBehaviour, IGridProvider
     {
-        public LevelText LevelText;
-        public Level[] Levels;
-        public int Width { get { return levelIterator.Current.Width; } }
-        public int Height { get { return levelIterator.Current.Height; } }
+        public int Width { get { return builder.Current.GetLength(0); } }
+        public int Height { get { return builder.Current.GetLength(1); } }
 
-        private List<Level>.Enumerator levelIterator;
-        private Dictionary<Tuple<int, int>, Tuple<GameObject, bool>> instances;
+        public LevelText LevelText;
+
         private LightGrid lightGrid;
+        private List<Element[,]> levels;
+        private LevelBuilder builder;
+        private int level;
 
 
         private void Start()
         {
+            builder = GetComponent<LevelBuilder>();
             lightGrid = GetComponent<LightGrid>();
             lightGrid.OnPuzzleSolved += EndLevel;
-            levelIterator = Levels.ToList().GetEnumerator();
             InitNextLevel();
         }
 
@@ -38,16 +39,9 @@ namespace Assets.Base.Scripts.Grid
 
         private void InitNextLevel()
         {
-            if (levelIterator.MoveNext())
+            if (builder.MoveNext())
             {
-                instances = levelIterator.Current.Elements.ToDictionary(it => new Tuple<int, int>(it.X, it.Y),
-                    e =>
-                    {
-                        var instantiate = Instantiate(e.Prefab);
-                        instantiate.name += " [" + e.X + ", " + e.Y + "]";
-                        return new Tuple<GameObject, bool>(instantiate, e.active);
-                    });
-
+                level++;
                 PrepareLevel();
                 Invoke("StartLevel", 3);
             }
@@ -60,42 +54,25 @@ namespace Assets.Base.Scripts.Grid
 
         public GameObject Provide(int x, int y)
         {
-            var key = new Tuple<int, int>(x, y);
-            return instances.ContainsKey(key) ? instances[key].Item1 : null;
+            var element = builder.Current[x, y];
+            return element != null ? element.Prefab : null;
         }
 
         private void PrepareLevel()
         {
             GetComponent<AlignInGrid>().Align();
-            LevelText.TriggerLevel("Level "+ (Levels.IndexOf(levelIterator.Current) + 1).ToRoman());
+            LevelText.TriggerLevel("Level "+ level.ToRoman());
         }
 
         private void StartLevel()
         {
-            foreach (var value in instances.Values)
+            foreach (var instance in builder.Current)
             {
-                if(value.Item2) value.Item1.GetComponent<PullableSwitch>().Activate();
+                if (instance != null)
+                    instance.Prefab.GetComponent<PullableSwitch>().Activate(instance.CurrentElevation);
             }
 
             lightGrid.Init();
         }
-    }
-
-    [Serializable]
-    public class Level
-    {
-        public int Width;
-        public int Height;
-
-        public Element[] Elements;
-    }
-
-    [Serializable]
-    public class Element
-    {
-        public int X;
-        public int Y;
-        public GameObject Prefab;
-        public bool active;
     }
 }
