@@ -17,7 +17,7 @@ namespace Assets.Base.Scripts.Grid
 
         public LevelText LevelText;
 
-        private LightGrid lightGrid;
+        private PistonGrid _pistonGrid;
         private List<Element[,]> levels;
         private LevelBuilder builder;
         private int level;
@@ -26,14 +26,14 @@ namespace Assets.Base.Scripts.Grid
         private void Start()
         {
             builder = GetComponent<LevelBuilder>();
-            lightGrid = GetComponent<LightGrid>();
-            lightGrid.OnPuzzleSolved += EndLevel;
+            _pistonGrid = GetComponent<PistonGrid>();
+            _pistonGrid.OnPuzzleSolved += EndLevel;
             InitNextLevel();
         }
 
         private void EndLevel()
         {
-            lightGrid.DeInit();
+            _pistonGrid.DeInit();
             Invoke("InitNextLevel", 1);
         }
 
@@ -69,10 +69,10 @@ namespace Assets.Base.Scripts.Grid
             foreach (var instance in builder.Current)
             {
                 if (instance != null)
-                    instance.Prefab.GetComponent<PullableSwitch>().Activate(instance.CurrentElevation);
+                    instance.Prefab.GetComponent<Piston>().elevate(instance.CurrentElevation);
             }
 
-            lightGrid.Init();
+            _pistonGrid.Init();
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class LightGrid : MonoBehaviour
+    public class PistonGrid : MonoBehaviour
     {
         public delegate void OnPuzzleSolvedHandler();
         public event OnPuzzleSolvedHandler OnPuzzleSolved;
@@ -19,18 +19,18 @@ namespace Assets.Scripts
             grid = GetComponent<Grid>();
             
             transform.Children()
-                .Select(child => child.GetComponent<ClickableSwitch>())
+                .Select(child => child.GetComponent<Piston>())
                 .ForEach(child => child.OnSwitchClicked += FlipSwitch);
         }
 
         public void DeInit()
         {
             transform.Children()
-                .Select(child => child.GetComponent<ClickableSwitch>())
+                .Select(child => child.GetComponent<Piston>())
                 .ForEach(child => child.OnSwitchClicked -= FlipSwitch);
         }
 
-        private void FlipSwitch(ClickableSwitch clickableSwitch)
+        private void FlipSwitch(Piston clickableSwitch)
         {
             var cell = clickableSwitch.GetComponent<GridCell>();
             for (var x = cell.X - Range; x <= cell.X + Range; x++)
@@ -41,7 +41,7 @@ namespace Assets.Scripts
                     {
                         var neighbour = grid[x, y];
                         if (neighbour != null)
-                            neighbour.GetComponent<ClickableSwitch>().Switch();
+                            neighbour.GetComponent<Piston>().Switch();
                     }
                 }
             }
@@ -51,7 +51,7 @@ namespace Assets.Scripts
 
         private bool Solved()
         {
-            return transform.Children().All(child => child.GetComponent<ClickableSwitch>().IsDown());
+            return transform.Children().All(child => child.GetComponent<Piston>().IsDown());
         }
     }
 }
