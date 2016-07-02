@@ -68,7 +68,7 @@ namespace Assets.Scripts
             var currentLevel = int.Parse(s[2].ToString());
 
             var instantiate = Instantiate(Pistons[level-1]);
-            instantiate.name += " [" + x + ", " + y + "]";
+            instantiate.name = "Switch " + level + " [" + x + ", " + y + "]";
             return new Element(instantiate, currentLevel);
         }
     }

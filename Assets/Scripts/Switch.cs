@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Assets.Scripts
 {
     [RequireComponent(typeof(Collider))]
-    public class Piston : MonoBehaviour
+    public class Switch : MonoBehaviour
     {
         public Transform PullablePart;
         public int Levels = 1;
@@ -19,7 +19,7 @@ namespace Assets.Scripts
             Click();
         }
 
-        public delegate void OnSwitchClickedHandler(Piston clickable);
+        public delegate void OnSwitchClickedHandler(Switch clickable);
 
         public event OnSwitchClickedHandler OnSwitchClicked;
 
@@ -28,7 +28,7 @@ namespace Assets.Scripts
             if (OnSwitchClicked != null) OnSwitchClicked(this);
         }
 
-        public void Switch()
+        public void FlipSwitch()
         {
             elevate((elevation + 1) % (Levels + 1));
         }

@@ -19,18 +19,18 @@ namespace Assets.Scripts
             grid = GetComponent<Grid>();
             
             transform.Children()
-                .Select(child => child.GetComponent<Piston>())
+                .Select(child => child.GetComponent<Switch>())
                 .ForEach(child => child.OnSwitchClicked += FlipSwitch);
         }
 
         public void DeInit()
         {
             transform.Children()
-                .Select(child => child.GetComponent<Piston>())
+                .Select(child => child.GetComponent<Switch>())
                 .ForEach(child => child.OnSwitchClicked -= FlipSwitch);
         }
 
-        private void FlipSwitch(Piston clickableSwitch)
+        private void FlipSwitch(Switch clickableSwitch)
         {
             var cell = clickableSwitch.GetComponent<GridCell>();
             for (var x = cell.X - Range; x <= cell.X + Range; x++)
@@ -41,7 +41,7 @@ namespace Assets.Scripts
                     {
                         var neighbour = grid[x, y];
                         if (neighbour != null)
-                            neighbour.GetComponent<Piston>().Switch();
+                            neighbour.GetComponent<Switch>().FlipSwitch();
                     }
                 }
             }
@@ -51,7 +51,7 @@ namespace Assets.Scripts
 
         private bool Solved()
         {
-            return transform.Children().All(child => child.GetComponent<Piston>().IsDown());
+            return transform.Children().All(child => child.GetComponent<Switch>().IsDown());
         }
     }
 }
