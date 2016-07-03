@@ -9,6 +9,7 @@ namespace Assets.Scripts
     {
         public delegate void OnPuzzleSolvedHandler();
         public event OnPuzzleSolvedHandler OnPuzzleSolved;
+        public AudioSource DragSound;
 
         private Grid grid;
 
@@ -32,6 +33,8 @@ namespace Assets.Scripts
 
         private void FlipSwitch(Switch clickableSwitch)
         {
+            PlaySound();
+
             var cell = clickableSwitch.GetComponent<GridCell>();
             for (var x = cell.X - Range; x <= cell.X + Range; x++)
             {
@@ -49,9 +52,20 @@ namespace Assets.Scripts
             if (Solved() && OnPuzzleSolved != null) OnPuzzleSolved();
         }
 
+        private void PlaySound()
+        {
+            DragSound.volume = Random.Range(0.8f, 1f);
+            DragSound.Play();
+        }
+
         private bool Solved()
         {
             return transform.Children().All(child => child.GetComponent<Switch>().IsDown());
+        }
+
+        public void Activate()
+        {
+            PlaySound();
         }
     }
 }

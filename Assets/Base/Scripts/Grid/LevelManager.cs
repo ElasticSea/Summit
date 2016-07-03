@@ -107,7 +107,10 @@ namespace Assets.Base.Scripts.Grid
             foreach (var instance in levelPrefabs)
             {
                 if (instance != null)
+                {
                     instance.Prefab.GetComponent<Switch>().elevate(instance.CurrentElevation);
+                    GetComponent<PistonGrid>().Activate();
+                }
             }
 
             _pistonGrid.Init();
