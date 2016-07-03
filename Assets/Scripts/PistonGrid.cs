@@ -27,7 +27,7 @@ namespace Assets.Scripts
         public void DeInit()
         {
             transform.Children()
-                .Select(child => child.GetComponent<Switch>())
+                .Select(child => child.GetComponentInChildren<Switch>())
                 .ForEach(child => child.OnSwitchClicked -= FlipSwitch);
         }
 
