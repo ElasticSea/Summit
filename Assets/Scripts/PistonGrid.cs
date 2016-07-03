@@ -20,7 +20,7 @@ namespace Assets.Scripts
             grid = GetComponent<Grid>();
             
             transform.Children()
-                .Select(child => child.GetComponent<Switch>())
+                .Select(child => child.GetComponentInChildren<Switch>())
                 .ForEach(child => child.OnSwitchClicked += FlipSwitch);
         }
 
@@ -35,7 +35,7 @@ namespace Assets.Scripts
         {
             PlaySound();
 
-            var cell = clickableSwitch.GetComponent<GridCell>();
+            var cell = clickableSwitch.transform.parent.GetComponent<GridCell>();
             for (var x = cell.X - Range; x <= cell.X + Range; x++)
             {
                 for (var y = cell.Y - Range; y <= cell.Y + Range; y++)
@@ -44,7 +44,7 @@ namespace Assets.Scripts
                     {
                         var neighbour = grid[x, y];
                         if (neighbour != null)
-                            neighbour.GetComponent<Switch>().FlipSwitch();
+                            neighbour.GetComponentInChildren<Switch>().FlipSwitch();
                     }
                 }
             }
@@ -54,13 +54,13 @@ namespace Assets.Scripts
 
         private void PlaySound()
         {
-            DragSound.volume = Random.Range(0.8f, 1f);
+            DragSound.volume = Random.Range(0.5f, 1f);
             DragSound.Play();
         }
 
         private bool Solved()
         {
-            return transform.Children().All(child => child.GetComponent<Switch>().IsDown());
+            return transform.Children().All(child => child.GetComponentInChildren<Switch>().IsDown());
         }
 
         public void Activate()

@@ -74,18 +74,19 @@ namespace Assets.Base.Scripts.Grid
 
         private void InitLevel()
         {
-            if (CurrentLevel < 5)
-            {
-                themeManager.SwitchTheme(themeManager.LightTheme);
-            } else if (CurrentLevel < 10)
-            {
-                themeManager.SwitchTheme(themeManager.MediumTheme);
-            }
-            else
-            {
-                themeManager.SwitchTheme(themeManager.DarkTheme);
-            }
             levelPrefabs = GetComponent<LevelBuilder>().FillBlueprint(levels[CurrentLevel]);
+            switch (levelPrefabs.ToList().Max(it => it.Prefab.GetComponentInChildren<Switch>().Levels))
+            {
+                case 1:
+                    themeManager.SwitchTheme(themeManager.LightTheme);
+                    break;
+                case 2:
+                    themeManager.SwitchTheme(themeManager.MediumTheme);
+                    break;
+                case 3:
+                    themeManager.SwitchTheme(themeManager.DarkTheme);
+                    break;
+            }
             PrepareLevel();
             Invoke("StartLevel", transitionTime);
         }
@@ -93,7 +94,7 @@ namespace Assets.Base.Scripts.Grid
         public GameObject Provide(int x, int y)
         {
             var element = levelPrefabs[x, y];
-            return element != null ? element.Prefab : null;
+            return element != null ? element.Prefab.transform.parent.gameObject : null;
         }
 
         private void PrepareLevel()
@@ -108,7 +109,7 @@ namespace Assets.Base.Scripts.Grid
             {
                 if (instance != null)
                 {
-                    instance.Prefab.GetComponent<Switch>().elevate(instance.CurrentElevation);
+                    instance.Prefab.elevate(instance.CurrentElevation);
                     GetComponent<PistonGrid>().Activate();
                 }
             }

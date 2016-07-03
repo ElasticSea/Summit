@@ -404,5 +404,13 @@ namespace Assets.Shared.Scripts
 
             return romanNumeral;
         }
+
+        public static IEnumerable<T> ToList<T>(this T[,] array2d) where T : class
+        {
+            foreach (var element in array2d)
+            {
+                yield return element;
+            }
+        }
     }
 }

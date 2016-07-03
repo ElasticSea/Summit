@@ -48,7 +48,7 @@ namespace Assets.Scripts
 
             var instantiate = Instantiate(Pistons[level-1]);
             instantiate.name = "Switch " + level + " [" + x + ", " + y + "]";
-            return new Element(instantiate, currentLevel);
+            return new Element(instantiate.GetComponentInChildren<Switch>(), currentLevel);
         }
     }
 
@@ -56,9 +56,9 @@ namespace Assets.Scripts
     public class Element
     {
         public readonly int CurrentElevation;
-        public readonly GameObject Prefab;
+        public readonly Switch Prefab;
 
-        public Element(GameObject prefab, int currentElevation)
+        public Element(Switch prefab, int currentElevation)
         {
             Prefab = prefab;
             CurrentElevation = currentElevation;
