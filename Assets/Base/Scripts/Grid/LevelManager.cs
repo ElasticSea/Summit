@@ -74,8 +74,8 @@ namespace Assets.Base.Scripts.Grid
 
         private void InitLevel()
         {
-            levelPrefabs = GetComponent<LevelBuilder>().FillBlueprint(levels[CurrentLevel]);
-            switch (levelPrefabs.ToList().Max(it => it.Prefab.GetComponentInChildren<Switch>().Levels))
+            // ReSharper disable once BuiltInTypeReferenceStyle
+            switch (levels[CurrentLevel].ToList().Select<String, int>(getLevel).Max())
             {
                 case 1:
                     themeManager.SwitchTheme(themeManager.LightTheme);
@@ -87,8 +87,16 @@ namespace Assets.Base.Scripts.Grid
                     themeManager.SwitchTheme(themeManager.DarkTheme);
                     break;
             }
+
+            levelPrefabs = GetComponent<LevelBuilder>().FillBlueprint(levels[CurrentLevel]);
             PrepareLevel();
             Invoke("StartLevel", transitionTime);
+        }
+
+        private int getLevel(string blueprint)
+        {
+            if (blueprint == "NA") return 0;
+            return int.Parse(blueprint[0].ToString());
         }
 
         public GameObject Provide(int x, int y)
