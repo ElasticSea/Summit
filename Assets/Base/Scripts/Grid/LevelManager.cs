@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Assets.Base.Scripts.Grid
 {
-    [RequireComponent(typeof(LevelBuilder))]
+    [RequireComponent(typeof(LevelBuilder), typeof(ThemeManager))]
     public class LevelManager : MonoBehaviour, IGridProvider
     {
         private const float transitionTime = 2f;
@@ -21,6 +21,7 @@ namespace Assets.Base.Scripts.Grid
         private PistonGrid _pistonGrid;
         private List<string[,]> levels;
         private Element[,] levelPrefabs;
+        private ThemeManager themeManager;
 
         public int CurrentLevel
         {
@@ -42,6 +43,7 @@ namespace Assets.Base.Scripts.Grid
 
         private void Start()
         {
+            themeManager = GetComponent<ThemeManager>();
             levels = GetComponent<LevelBuilder>().Levels;
             _pistonGrid = GetComponent<PistonGrid>();
             _pistonGrid.OnPuzzleSolved += EndLevel;
@@ -64,6 +66,7 @@ namespace Assets.Base.Scripts.Grid
             }
             else
             {
+                CurrentLevel = levels.Count - 1;
                 throw new InvalidOperationException("GAME OVER");
             }
 
@@ -71,6 +74,17 @@ namespace Assets.Base.Scripts.Grid
 
         private void InitLevel()
         {
+            if (CurrentLevel < 5)
+            {
+                themeManager.SwitchTheme(themeManager.LightTheme);
+            } else if (CurrentLevel < 10)
+            {
+                themeManager.SwitchTheme(themeManager.MediumTheme);
+            }
+            else
+            {
+                themeManager.SwitchTheme(themeManager.DarkTheme);
+            }
             levelPrefabs = GetComponent<LevelBuilder>().FillBlueprint(levels[CurrentLevel]);
             PrepareLevel();
             Invoke("StartLevel", transitionTime);
