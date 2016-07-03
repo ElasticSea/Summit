@@ -57,7 +57,7 @@ namespace Assets.Base.Scripts.Grid
 
         private void InitNextLevel()
         {
-            if (CurrentLevel < levels.Count - 1)
+            if (CurrentLevel < levels.Count)
             {
                 MaxLevel = Math.Max(CurrentLevel, MaxLevel);
                 InitLevel();
@@ -107,7 +107,7 @@ namespace Assets.Base.Scripts.Grid
 
         public bool CanNextLevel()
         {
-            return CurrentLevel < MaxLevel;
+            return CurrentLevel < MaxLevel || Debug.isDebugBuild;
         }
 
         public void RestartLevel()
