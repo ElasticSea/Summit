@@ -12,20 +12,37 @@ namespace Assets.Base.Scripts.Grid
     [RequireComponent(typeof(LevelBuilder))]
     public class LevelManager : MonoBehaviour, IGridProvider
     {
-        public int Width { get { return builder.Current.GetLength(0); } }
-        public int Height { get { return builder.Current.GetLength(1); } }
+        private const float transitionTime = 2f;
+        public int Width { get { return levels[CurrentLevel].GetLength(0); } }
+        public int Height { get { return levels[CurrentLevel].GetLength(1); } }
 
         public LevelText LevelText;
 
         private PistonGrid _pistonGrid;
-        private List<Element[,]> levels;
-        private LevelBuilder builder;
-        private int level;
+        private List<string[,]> levels;
+        private Element[,] levelPrefabs;
 
+        public int CurrentLevel
+        {
+            get { return PlayerPrefsSerializer.Load<int>("CurrentLevel"); }
+            set
+            {
+                PlayerPrefsSerializer.Save("CurrentLevel", value);
+            }
+        }
+
+        public int MaxLevel
+        {
+            get { return PlayerPrefsSerializer.Load<int>("MaxLevel"); }
+            set
+            {
+                PlayerPrefsSerializer.Save("MaxLevel", value);
+            }
+        }
 
         private void Start()
         {
-            builder = GetComponent<LevelBuilder>();
+            levels = GetComponent<LevelBuilder>().Levels;
             _pistonGrid = GetComponent<PistonGrid>();
             _pistonGrid.OnPuzzleSolved += EndLevel;
             InitNextLevel();
@@ -34,16 +51,16 @@ namespace Assets.Base.Scripts.Grid
         private void EndLevel()
         {
             _pistonGrid.DeInit();
+            CurrentLevel++;
             Invoke("InitNextLevel", 1);
         }
 
         private void InitNextLevel()
         {
-            if (builder.MoveNext())
+            if (CurrentLevel < levels.Count - 1)
             {
-                level++;
-                PrepareLevel();
-                Invoke("StartLevel", 3);
+                MaxLevel = Math.Max(CurrentLevel, MaxLevel);
+                InitLevel();
             }
             else
             {
@@ -52,27 +69,68 @@ namespace Assets.Base.Scripts.Grid
 
         }
 
+        private void InitLevel()
+        {
+            levelPrefabs = GetComponent<LevelBuilder>().FillBlueprint(levels[CurrentLevel]);
+            PrepareLevel();
+            Invoke("StartLevel", transitionTime);
+        }
+
         public GameObject Provide(int x, int y)
         {
-            var element = builder.Current[x, y];
+            var element = levelPrefabs[x, y];
             return element != null ? element.Prefab : null;
         }
 
         private void PrepareLevel()
         {
             GetComponent<AlignInGrid>().Align();
-            LevelText.TriggerLevel("Level "+ level.ToRoman());
+            LevelText.TriggerLevel("Level "+ (CurrentLevel + 1).ToRoman(), transitionTime);
         }
 
         private void StartLevel()
         {
-            foreach (var instance in builder.Current)
+            foreach (var instance in levelPrefabs)
             {
                 if (instance != null)
                     instance.Prefab.GetComponent<Switch>().elevate(instance.CurrentElevation);
             }
 
             _pistonGrid.Init();
+        }
+
+        public void NextLevel()
+        {
+            if (CanNextLevel())
+                SetLevel(CurrentLevel + 1);
+        }
+
+        public bool CanNextLevel()
+        {
+            return CurrentLevel < MaxLevel;
+        }
+
+        public void RestartLevel()
+        {
+            SetLevel(CurrentLevel);
+        }
+
+        public void PreviousLevel()
+        {
+            if(CanPreviousLevel())
+            SetLevel(CurrentLevel - 1);
+        }
+
+        public bool CanPreviousLevel()
+        {
+            return CurrentLevel > 0;
+        }
+
+        private void SetLevel(int level)
+        {
+            CancelInvoke();
+            CurrentLevel = level;
+            InitLevel();
         }
     }
 }

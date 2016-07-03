@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
@@ -8,10 +7,19 @@ namespace Assets.Scripts.UI
     {
         public Text Text;
 
-        public void TriggerLevel(string name)
+        private float showTime;
+        private float triggerTime;
+
+        public void TriggerLevel(string name, float showTime)
         {
+            this.showTime = showTime;
+            triggerTime = Time.time;
             Text.text = name;
-            GetComponent<Animator>().SetTrigger("Show");
+        }
+
+        private void Update()
+        {
+            GetComponent<Animator>().SetBool("Show", Time.time - triggerTime < showTime);
         }
     }
 }
