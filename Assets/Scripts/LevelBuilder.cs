@@ -62,10 +62,10 @@ namespace Assets.Scripts
 
         private Element CreateElement(string s, int x, int y)
         {
-            if (s == "N_A") return null;
+            if (s == "NA") return null;
 
-            var level = int.Parse(s[1].ToString());
-            var currentLevel = int.Parse(s[2].ToString());
+            var level = int.Parse(s[0].ToString());
+            var currentLevel = int.Parse(s[1].ToString());
 
             var instantiate = Instantiate(Pistons[level-1]);
             instantiate.name = "Switch " + level + " [" + x + ", " + y + "]";
