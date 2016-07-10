@@ -108,7 +108,7 @@ namespace Assets.Base.Scripts.Grid
         private void PrepareLevel()
         {
             GetComponent<AlignInGrid>().Align();
-            LevelText.TriggerLevel("Level "+ (CurrentLevel + 1).ToRoman(), transitionTime);
+            LevelText.TriggerLevel((CurrentLevel + 1).ToRoman(), transitionTime);
         }
 
         private void StartLevel()
