@@ -55,6 +55,7 @@ namespace Assets.Scripts
         private void PlaySound()
         {
             DragSound.volume = Random.Range(0.5f, 1f);
+            DragSound.pitch = Random.Range(0.85f, 1.15f);
             DragSound.Play();
         }
 
