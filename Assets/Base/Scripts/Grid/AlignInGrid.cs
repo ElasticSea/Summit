@@ -1,6 +1,5 @@
 ﻿using Assets.Shared.Scripts;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
 
 namespace Assets.Base.Scripts.Grid
 {
@@ -15,7 +14,7 @@ namespace Assets.Base.Scripts.Grid
 
             transform.RemoveAllChildren();
 
-            var grid = transform.GetOrAddComponent<Grid>();
+            var grid = transform.GetComponent<Grid>();
             grid.init(new GameObject[provider.Width, provider.Height]);
 
             var size = 1 + ItemOffset;

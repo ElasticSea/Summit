@@ -1,15 +1,12 @@
 ﻿using System;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
-using Vexe.Runtime.Types;
 
 namespace Assets.Base.Scripts.Grid
 {
-    public class Grid : BaseBehaviour
+    public class Grid : MonoBehaviour
     {
-        [Hide, SerializeField] private ArrayWithArray[] _grid;
+        [SerializeField] private ArrayWithArray[] _grid;
 
-        [Show]
         public int Width
         {
             get
@@ -19,7 +16,6 @@ namespace Assets.Base.Scripts.Grid
             }
         }
 
-        [Show]
         public int Height
         {
             get
@@ -37,9 +33,11 @@ namespace Assets.Base.Scripts.Grid
             set
             {
                 _grid[x][y] = value;
-                if (value != null)
-                {
-                    var cell = value.transform.GetOrAddComponent<GridCell>();
+                if (value != null) {
+                    var cell = value.transform.GetComponent<GridCell>();
+                    if (cell == false)
+                        cell = value.transform.gameObject.AddComponent<GridCell>();
+
                     cell.X = x;
                     cell.Y = y;
                 }

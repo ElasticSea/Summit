@@ -2,6 +2,7 @@
 using Assets.Base.Scripts.Grid;
 using Assets.Shared.Scripts;
 using UnityEngine;
+using Grid = Assets.Base.Scripts.Grid.Grid;
 
 namespace Assets.Scripts
 {

@@ -29,8 +29,11 @@ sysinfo.txt
 *.apk
 *.unitypackage
 *.keystore
-
-# Paid Assets
-*/Paid/
-*/Paid.meta
 Out/
+
+# Packages
+*/Packages/
+*/Packages.meta
+
+# Visual Studio
+/.vs
