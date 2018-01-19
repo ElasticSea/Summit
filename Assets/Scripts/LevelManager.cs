@@ -3,70 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts;
 using Assets.Scripts.UI;
-using Assets.Shared.Scripts;
-using Assets.Shared.Scripts.tuple;
 using UnityEngine;
+using Vexe.Runtime.Extensions;
 
 namespace Assets.Base.Scripts.Grid
 {
     [RequireComponent(typeof(LevelBuilder), typeof(ThemeManager))]
-    public class LevelManager : MonoBehaviour, IGridProvider
+    public class LevelManager : MonoBehaviour
     {
-        private const float transitionTime = 2f;
-        public int Width { get { return levels[CurrentLevel].GetLength(0); } }
-        public int Height { get { return levels[CurrentLevel].GetLength(1); } }
+        [SerializeField] private ThemeManager themeManager;
+        [SerializeField] private float transitionTime = 2f;
+        [SerializeField] private LevelText LevelText;
+        [SerializeField] private LevelBuilder LevelBuilder;
 
-        public LevelText LevelText;
-
-        private PistonGrid _pistonGrid;
-        private List<string[,]> levels;
-        private Element[,] levelPrefabs;
-        private ThemeManager themeManager;
-
-        public int CurrentLevel
-        {
-            get { return PlayerPrefsSerializer.Load<int>("CurrentLevel"); }
-            set
-            {
-                PlayerPrefsSerializer.Save("CurrentLevel", value);
-            }
-        }
-
-        public int MaxLevel
-        {
-            get { return PlayerPrefsSerializer.Load<int>("MaxLevel"); }
-            set
-            {
-                PlayerPrefsSerializer.Save("MaxLevel", value);
-            }
-        }
+        private SwitchGrid grid;
+        private readonly Settings settings = new Settings();
 
         private void Start()
         {
-            themeManager = GetComponent<ThemeManager>();
-            levels = GetComponent<LevelBuilder>().Levels;
-            _pistonGrid = GetComponent<PistonGrid>();
-            _pistonGrid.OnPuzzleSolved += EndLevel;
             InitNextLevel();
         }
 
         private void EndLevel()
         {
-            _pistonGrid.DeInit();
-            CurrentLevel++;
+            grid.OnPuzzleSolved -= EndLevel;
+            grid.Deactivate();
+
+            settings.CurrentLevel++;
             Invoke("InitNextLevel", 1);
         }
 
         private void InitNextLevel()
         {
-            if (CurrentLevel < levels.Count)
+            if (settings.CurrentLevel < LevelBuilder.AvailableLevels)
             {
-                MaxLevel = Math.Max(CurrentLevel, MaxLevel);
+                settings.MaxLevel = Math.Max(settings.CurrentLevel, settings.MaxLevel);
                 InitLevel();
             }
             else
             {
-                CurrentLevel = levels.Count - 1;
+                settings.CurrentLevel = LevelBuilder.AvailableLevels - 1;
                 throw new InvalidOperationException("GAME OVER");
             }
 
@@ -74,8 +50,11 @@ namespace Assets.Base.Scripts.Grid
 
         private void InitLevel()
         {
-            // ReSharper disable once BuiltInTypeReferenceStyle
-            switch (levels[CurrentLevel].ToList().Select<String, int>(getLevel).Max())
+            if(grid != null) Destroy(grid.gameObject);
+            grid = LevelBuilder.CreateGrid(settings.CurrentLevel);
+            grid.OnPuzzleSolved += EndLevel;
+
+            switch (grid.grid.cells.Select(cell => cell.Value?.Elevation).Max())
             {
                 case 1:
                     themeManager.SwitchTheme(themeManager.LightTheme);
@@ -88,74 +67,51 @@ namespace Assets.Base.Scripts.Grid
                     break;
             }
 
-            levelPrefabs = GetComponent<LevelBuilder>().FillBlueprint(levels[CurrentLevel]);
             PrepareLevel();
             Invoke("StartLevel", transitionTime);
         }
 
-        private int getLevel(string blueprint)
-        {
-            if (blueprint == "NA") return 0;
-            return int.Parse(blueprint[0].ToString());
-        }
-
-        public GameObject Provide(int x, int y)
-        {
-            var element = levelPrefabs[x, y];
-            return element != null ? element.Prefab.transform.parent.gameObject : null;
-        }
-
         private void PrepareLevel()
         {
-            GetComponent<AlignInGrid>().Align();
-            LevelText.TriggerLevel((CurrentLevel + 1).ToRoman(), transitionTime);
+            LevelText.TriggerLevel((settings.CurrentLevel + 1).ToRoman(), transitionTime);
         }
 
         private void StartLevel()
         {
-            foreach (var instance in levelPrefabs)
-            {
-                if (instance != null)
-                {
-                    instance.Prefab.elevate(instance.CurrentElevation);
-                    GetComponent<PistonGrid>().Activate();
-                }
-            }
-
-            _pistonGrid.Init();
+            grid.Activate();
         }
 
         public void NextLevel()
         {
             if (CanNextLevel())
-                SetLevel(CurrentLevel + 1);
+                SetLevel(settings.CurrentLevel + 1);
         }
 
         public bool CanNextLevel()
         {
-            return CurrentLevel < MaxLevel || Debug.isDebugBuild;
+            return settings.CurrentLevel < settings.MaxLevel || Debug.isDebugBuild;
         }
 
         public void RestartLevel()
         {
-            SetLevel(CurrentLevel);
+            SetLevel(settings.CurrentLevel);
         }
 
         public void PreviousLevel()
         {
             if(CanPreviousLevel())
-            SetLevel(CurrentLevel - 1);
+            SetLevel(settings.CurrentLevel - 1);
         }
 
         public bool CanPreviousLevel()
         {
-            return CurrentLevel > 0;
+            return settings.CurrentLevel > 0;
         }
 
         private void SetLevel(int level)
         {
             CancelInvoke();
-            CurrentLevel = level;
+            settings.CurrentLevel = level;
             InitLevel();
         }
     }
