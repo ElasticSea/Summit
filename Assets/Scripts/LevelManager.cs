@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts;
-using Assets.Scripts.UI;
+using UnityEditor;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
 
 namespace Assets.Base.Scripts.Grid
 {
@@ -12,12 +10,13 @@ namespace Assets.Base.Scripts.Grid
     public class LevelManager : MonoBehaviour
     {
         [SerializeField] private ThemeManager themeManager;
-        [SerializeField] private float transitionTime = 2f;
-        [SerializeField] private LevelText LevelText;
         [SerializeField] private LevelBuilder LevelBuilder;
+        [SerializeField] private float levelTextTransitionTime = 2f;
 
         private SwitchGrid grid;
         private readonly Settings settings = new Settings();
+
+        public event Action<int> OnLevel = levelId => { };
 
         private void Start()
         {
@@ -67,13 +66,8 @@ namespace Assets.Base.Scripts.Grid
                     break;
             }
 
-            PrepareLevel();
-            Invoke("StartLevel", transitionTime);
-        }
-
-        private void PrepareLevel()
-        {
-            LevelText.TriggerLevel((settings.CurrentLevel + 1).ToRoman(), transitionTime);
+            OnLevel(settings.CurrentLevel);
+            Invoke("StartLevel", levelTextTransitionTime);
         }
 
         private void StartLevel()
@@ -89,7 +83,7 @@ namespace Assets.Base.Scripts.Grid
 
         public bool CanNextLevel()
         {
-            return settings.CurrentLevel < settings.MaxLevel || Debug.isDebugBuild;
+            return settings.CurrentLevel < settings.MaxLevel || (Application.isEditor && settings.CurrentLevel < LevelBuilder.AvailableLevels - 1);
         }
 
         public void RestartLevel()
