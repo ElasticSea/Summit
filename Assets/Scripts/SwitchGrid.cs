@@ -17,6 +17,7 @@ namespace Assets.Scripts
 
         public int Range;
         private Dictionary<Switch, int> elevations;
+        public int MaxElevation => elevations.Keys.Max(s => s.Levels);
 
         public Switch Provide(int x, int y) => grid[x, y].Value;
 

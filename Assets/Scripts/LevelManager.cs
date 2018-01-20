@@ -53,7 +53,7 @@ namespace Assets.Base.Scripts.Grid
             grid = LevelBuilder.CreateGrid(settings.CurrentLevel);
             grid.OnPuzzleSolved += EndLevel;
 
-            switch (grid.grid.cells.Select(cell => cell.Value?.Elevation).Max())
+            switch (grid.MaxElevation)
             {
                 case 1:
                     themeManager.SwitchTheme(themeManager.LightTheme);
