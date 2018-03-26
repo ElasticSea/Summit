@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using Assets.Core.Extensions;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -7,61 +7,65 @@ namespace Assets.Scripts
 {
     public class LevelBuilder : MonoBehaviour
     {
-        [TextArea(3,10)]
-        public string Blueprint;
-        public GameObject[] Pistons;
+        [SerializeField, TextArea(3,10)] private string Blueprint;
+        [SerializeField] private Switch[] SwitchPrefabs;
+        [SerializeField] private SwitchGrid SwitchGridPrefab;
+        [SerializeField] private List<string[,]> levels;
 
-        private Element[,] instances;
-        private List<string[,]> levels;
+        public int AvailableLevels => levels.Count;
 
-        public List<string[,]> Levels
+        private void Awake()
         {
-            get
-            {
-                if (levels == null)
-                {
-                    return JsonConvert.DeserializeObject<List<string[,]>>(Blueprint);
-                }
-                return levels;
-            }
+            levels = JsonConvert.DeserializeObject<List<string[,]>>(Blueprint);
         }
 
-        public Element[,] FillBlueprint(string[,] current)
+        public SwitchGrid CreateGrid(int levelIndex)
         {
-            var elements = new Element[current.GetLength(0), current.GetLength(1)];
-            for (var x = 0; x < elements.GetLength(0); x++)
+            var level = levels[levelIndex];
+            var switchGrid = transform.InstantiateChild(SwitchGridPrefab);
+
+            var width = level.GetLength(0);
+            var height = level.GetLength(1);
+
+            var grid = new Grid<Switch>(width, height);
+
+            for (var x = 0; x < width; x++)
             {
-                for (var y = 0; y < elements.GetLength(1); y++)
+                for (var y = 0; y < height; y++)
                 {
-                    elements[x, y] = CreateElement(current[x, y], x, y);
+                    var element = CreateElement(level[x, y], x, y);
+
+                    if (element != null)
+                    {
+                        var sw = switchGrid.transform.InstantiateChild(SwitchPrefabs[element.Type - 1]);
+                        sw.name = "Switch " + level + " [" + x + ", " + y + "]";
+                        sw.Elevation = element.Elevation;
+                        grid[x, y].Value = sw;
+                    }
                 }
             }
-            return elements;
+
+            grid.Align(1);
+            switchGrid.Init(grid);
+
+            return switchGrid;
         }
 
         private Element CreateElement(string s, int x, int y)
         {
             if (s == "NA") return null;
 
-            var level = int.Parse(s[0].ToString());
-            var currentLevel = int.Parse(s[1].ToString());
-
-            var instantiate = Instantiate(Pistons[level-1]);
-            instantiate.name = "Switch " + level + " [" + x + ", " + y + "]";
-            return new Element(instantiate.GetComponentInChildren<Switch>(), currentLevel);
+            return new Element
+            {
+                Type = int.Parse(s[0].ToString()),
+                Elevation = int.Parse(s[1].ToString())
+            };
         }
-    }
 
-
-    public class Element
-    {
-        public readonly int CurrentElevation;
-        public readonly Switch Prefab;
-
-        public Element(Switch prefab, int currentElevation)
+        class Element
         {
-            Prefab = prefab;
-            CurrentElevation = currentElevation;
+            public int Type;
+            public int Elevation;
         }
     }
 }
