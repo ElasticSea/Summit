@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using Assets.Scripts;
-using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Base.Scripts.Grid
