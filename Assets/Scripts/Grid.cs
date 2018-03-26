@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using Vexe.Runtime.Extensions;
+﻿using Assets.Core.Extensions;
+using UnityEngine;
 
 namespace Assets.Scripts
 {

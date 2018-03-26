@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Base.Scripts;
+using Assets.Core.Extensions;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts

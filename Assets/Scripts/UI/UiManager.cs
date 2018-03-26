@@ -1,6 +1,6 @@
 ﻿using Assets.Base.Scripts.Grid;
+using Assets.Core.Extensions;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
 
 namespace Assets.Scripts.UI
 {

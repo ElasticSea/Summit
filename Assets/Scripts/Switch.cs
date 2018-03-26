@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Assets.Core.Extensions;
 using DG.Tweening;
 using UnityEngine;
-using Vexe.Runtime.Extensions;
 
 namespace Assets.Scripts
 {
