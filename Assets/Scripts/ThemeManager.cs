@@ -40,7 +40,9 @@ namespace Assets.Scripts
             {
                 this.value = value;
 
-                RenderSettings.fogColor = Color.Lerp(last.Fog, current.Fog, value);
+                var currentColor = Color.Lerp(last.Fog, current.Fog, value);
+                RenderSettings.fogColor = currentColor;
+                Camera.main.backgroundColor = currentColor;
                 BlockMaterial.SetFloat("_Blend", value);
 
                 if (value == 1)
