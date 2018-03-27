@@ -9,11 +9,14 @@ namespace Assets.Scripts
     public class Switch : MonoBehaviour
     {
         public Transform SwitchPart;
+        public Transform PedestalPart;
         public int Levels = 1;
         public float TransitionTime;
         public Ease TransitionEase;
 
         private int elevation;
+        private Tweener weener;
+
         public int Elevation
         {
             get { return elevation; }
@@ -30,8 +33,19 @@ namespace Assets.Scripts
                 .Select(c => c.gameObject)
                 .Distinct()
                 .ForEach(go =>
-                    go.AddComponent<ColliderClick>().OnClick += () => { OnSwitchClicked(this); }
+                    go.AddComponent<ColliderClick>().OnClick += () =>
+                    {
+                        AnimatePedestal();
+                        OnSwitchClicked(this);
+                    }
                 );
+        }
+
+        private void AnimatePedestal()
+        {
+            PedestalPart.SetLocalScaleY(1);
+            weener?.Kill();
+            weener = PedestalPart.DOScaleY(3, .2f).SetEase(Ease.OutQuad).SetLoops(2, LoopType.Yoyo);
         }
 
         public void AnimateElevation(int value)
