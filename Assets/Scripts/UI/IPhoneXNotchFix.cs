@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if UNITY_IOS
 using UnityEngine.iOS;
+#endif
 
 namespace Assets.Scripts.UI
 {
@@ -7,10 +9,14 @@ namespace Assets.Scripts.UI
     {
         private void Awake()
         {
+#if UNITY_IOS
             if (Device.generation != DeviceGeneration.iPhoneX)
             {
                 DestroyImmediate(gameObject);
             }
+#else
+            DestroyImmediate(gameObject);
+#endif
         }
     }
 }

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4932497682476008}
   - component: {fileID: 33243750066635650}
   - component: {fileID: 23894227339925320}
+  - component: {fileID: 65480183865033174}
   m_Layer: 0
   m_Name: Socket
   m_TagString: Untagged
@@ -46,7 +47,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1358493569374370
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -68,12 +69,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1358493569374370}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4932497682476008}
-  m_RootOrder: 0
+  m_Father: {fileID: 4873069555512236}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4873069555512236
 Transform:
@@ -86,6 +87,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4932497682476008}
+  - {fileID: 4369725916713274}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -98,8 +100,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4369725916713274}
+  m_Children: []
   m_Father: {fileID: 4873069555512236}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -197,6 +198,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: -0.5, z: 0}
+--- !u!65 &65480183865033174
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1073314990578064}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.600012, y: 1.100006, z: 1.600016}
+  m_Center: {x: 0, y: -0.45, z: -0.000002026558}
 --- !u!114 &114904120523878188
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -209,6 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SwitchPart: {fileID: 4369725916713274}
+  PedestalPart: {fileID: 4932497682476008}
   Levels: 1
   TransitionTime: 0.2
   TransitionEase: 7
