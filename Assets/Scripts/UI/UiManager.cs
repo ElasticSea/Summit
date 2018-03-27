@@ -48,12 +48,13 @@ namespace Assets.Scripts.UI
             prevLevel.OnClick += () =>
             {
                 levelManager.PreviousLevel();
-                prevLevel.Enabled = levelManager.CanPreviousLevel();
-                nextLevel.Enabled = levelManager.CanNextLevel();
             };
             nextLevel.OnClick += () =>
             {
                 levelManager.NextLevel();
+            };
+            levelManager.OnLevel += id =>
+            {
                 nextLevel.Enabled = levelManager.CanNextLevel();
                 prevLevel.Enabled = levelManager.CanPreviousLevel();
             };
