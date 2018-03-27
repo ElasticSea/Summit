@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4932497682476008}
   - component: {fileID: 33243750066635650}
   - component: {fileID: 23894227339925320}
+  - component: {fileID: 65480183865033174}
   m_Layer: 0
   m_Name: Socket
   m_TagString: Untagged
@@ -195,8 +196,20 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 1, z: 2}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: -0.5, z: 0}
+--- !u!65 &65480183865033174
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1073314990578064}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.600012, y: 1.100006, z: 1.600016}
+  m_Center: {x: 0, y: -0.45, z: -0.000002026558}
 --- !u!114 &114904120523878188
 MonoBehaviour:
   m_ObjectHideFlags: 1
