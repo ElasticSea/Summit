@@ -1,5 +1,6 @@
 ﻿using Assets.Base.Scripts.Grid;
-using Assets.Core.Extensions;
+using ElasticSea.Framework.Extensions;
+using ElasticSea.Framework.Util;
 using UnityEngine;
 
 namespace Assets.Scripts.UI
@@ -16,7 +17,8 @@ namespace Assets.Scripts.UI
         {
             levelManager.OnLevel += id =>
             {
-                levelText.TriggerLevel((id + 1).ToRoman(), levelTextTransitionTime);
+                var romanNumber = Utils.ToRoman(id + 1);
+                levelText.TriggerLevel(romanNumber, levelTextTransitionTime);
             };
 
             var toggleSound = iconGroup.InstantiateChild(iconButtonPrefab);

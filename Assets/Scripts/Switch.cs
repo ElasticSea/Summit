@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Assets.Core.Extensions;
 using DG.Tweening;
+using ElasticSea.Framework.Extensions;
 using UnityEngine;
 
 namespace Assets.Scripts
