@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Base.Scripts;
-using Assets.Core.Extensions;
+using ElasticSea.Framework.Extensions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

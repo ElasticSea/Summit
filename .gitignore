@@ -37,3 +37,6 @@ Out/
 
 # Visual Studio
 /.vs
+
+# Rider
+/.idea

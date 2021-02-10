@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assets.Core.Extensions;
+using ElasticSea.Framework.Extensions;
 using Newtonsoft.Json;
 using UnityEngine;
 
